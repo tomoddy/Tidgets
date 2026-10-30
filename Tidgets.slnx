@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Tidgets/Tidgets.csproj">
+    <Deploy />
+  </Project>
+</Solution>
