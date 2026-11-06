@@ -22,7 +22,7 @@ public static class WidgetViews
     {
         RemoteViews header = new(context.PackageName, Resource.Layout.widget_section_header);
         header.SetTextViewText(Resource.Id.section_title, title);
-        header.SetTextColor(Resource.Id.section_title, Color.ParseColor(status switch { "bad" => "#FF6B6B", "warn" => "#FFC857", "good" => "#6BCB77", _ => "#FFFFFF" }).ToArgb());
+        header.SetTextColor(Resource.Id.section_title, Color.ParseColor(status switch { "bad" => "#FF6B6B", "warn" => "#FFC857", "good" => "#6BCB77", _ => "#FFFFFF" }));
         views.AddView(containerId, header);
         List<string> shown = [.. items.Take(maxItems)];
         if (items.Count > maxItems)
