@@ -8,15 +8,40 @@ public class PourCastData
     /// <summary>
     /// The place name.
     /// </summary>
-    public string Title { get; set; } = string.Empty;
+    public string Place { get; set; } = string.Empty;
 
     /// <summary>
-    /// The current temperature.
+    /// The current temperature in °C.
     /// </summary>
-    public string Value { get; set; } = string.Empty;
+    public double? Temperature { get; set; }
 
     /// <summary>
-    /// The condition with the day's high and low.
+    /// The current condition, as a name like PartlyCloudy.
     /// </summary>
-    public string Subtitle { get; set; } = string.Empty;
+    public string Condition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Whether the sun is up now.
+    /// </summary>
+    public bool IsDay { get; set; }
+
+    /// <summary>
+    /// The highest temperature in the next 24 hours in °C.
+    /// </summary>
+    public double? High { get; set; }
+
+    /// <summary>
+    /// The lowest temperature in the next 24 hours in °C.
+    /// </summary>
+    public double? Low { get; set; }
+
+    /// <summary>
+    /// The next few hours.
+    /// </summary>
+    public List<PourCastHour> Hourly { get; set; } = [];
+
+    /// <summary>
+    /// The next few days.
+    /// </summary>
+    public List<PourCastDay> Daily { get; set; } = [];
 }
