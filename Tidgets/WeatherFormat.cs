@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace Tidgets;
@@ -45,6 +46,49 @@ public static class WeatherFormat
             builder.Append(letter);
         }
         return condition == "Unknown" ? string.Empty : builder.ToString();
+    }
+
+    /// <summary>
+    /// Describes when the rain starts or stops, in the device's time zone.
+    /// </summary>
+    /// <param name="isRaining">Whether it is raining now.</param>
+    /// <param name="start">When the next rain starts.</param>
+    /// <param name="end">When the current rain stops.</param>
+    public static string Rain(bool isRaining, DateTimeOffset? start, DateTimeOffset? end)
+    {
+        if (isRaining)
+        {
+            return end is null ? "Rain Continuing" : $"Rain Until {Clock(end.Value)}";
+        }
+        return start is null ? "No Rain Expected" : $"Rain from {Clock(start.Value)}";
+    }
+
+    /// <summary>
+    /// Gets the UV label, such as UV 3, or nothing when the index rounds to zero.
+    /// </summary>
+    /// <param name="uvIndex">The UV index.</param>
+    public static string Uv(double? uvIndex)
+    {
+        return uvIndex is null || Math.Round(uvIndex.Value, MidpointRounding.AwayFromZero) < 1 ? string.Empty : $"UV {Math.Round(uvIndex.Value, MidpointRounding.AwayFromZero)}";
+    }
+
+    /// <summary>
+    /// Gets the colour hex for a UV index, from green for low through yellow and orange to red for very high.
+    /// </summary>
+    /// <param name="uvIndex">The UV index.</param>
+    public static string UvColor(double? uvIndex)
+    {
+        return uvIndex switch { >= 8 => "#FF5252", >= 6 => "#FF9100", >= 3 => "#FFEA00", _ => "#00E676" };
+    }
+
+    /// <summary>
+    /// Formats a time as the hour, with the day name if it isn't today.
+    /// </summary>
+    /// <param name="time">The time.</param>
+    private static string Clock(DateTimeOffset time)
+    {
+        DateTimeOffset local = time.ToLocalTime();
+        return local.ToString(local.Date == DateTime.Today ? "h tt" : "ddd h tt", CultureInfo.InvariantCulture);
     }
 
     /// <summary>

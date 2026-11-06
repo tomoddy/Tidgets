@@ -60,6 +60,16 @@
                 android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/widget_rain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="#FF64B5F6"
+        android:textSize="13sp"
+        android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"

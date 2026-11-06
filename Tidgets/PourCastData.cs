@@ -36,6 +36,21 @@ public class PourCastData
     public double? Low { get; set; }
 
     /// <summary>
+    /// Whether it is raining in the current hour.
+    /// </summary>
+    public bool IsRaining { get; set; }
+
+    /// <summary>
+    /// When the next rain starts, if it isn't raining now.
+    /// </summary>
+    public DateTimeOffset? RainStart { get; set; }
+
+    /// <summary>
+    /// When the current rain stops, if it is raining and it stops within the forecast.
+    /// </summary>
+    public DateTimeOffset? RainEnd { get; set; }
+
+    /// <summary>
     /// The next few hours.
     /// </summary>
     public List<PourCastHour> Hourly { get; set; } = [];

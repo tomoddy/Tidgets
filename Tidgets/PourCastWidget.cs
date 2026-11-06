@@ -1,5 +1,6 @@
 using Android.Appwidget;
 using Android.Content;
+using Android.Graphics;
 using System.Globalization;
 using System.Text.Json;
 
@@ -37,6 +38,7 @@ public class PourCastWidget : SourceWidget
         views.SetTextViewText(Resource.Id.widget_icon, WeatherFormat.Icon(data.Condition, data.IsDay));
         views.SetTextViewText(Resource.Id.widget_condition, WeatherFormat.Words(data.Condition));
         views.SetTextViewText(Resource.Id.widget_highlow, $"H:{WeatherFormat.Degrees(data.High)} L:{WeatherFormat.Degrees(data.Low)}");
+        views.SetTextViewText(Resource.Id.widget_rain, WeatherFormat.Rain(data.IsRaining, data.RainStart, data.RainEnd));
         views.RemoveAllViews(Resource.Id.widget_hourly);
         for (int index = 0; index < Math.Min(data.Hourly.Count, 6); index++)
         {
@@ -62,6 +64,8 @@ public class PourCastWidget : SourceWidget
             item.SetTextViewText(Resource.Id.day_icon, WeatherFormat.Icon(day.Condition, true));
             item.SetTextViewText(Resource.Id.day_low, WeatherFormat.Degrees(day.Low));
             item.SetTextViewText(Resource.Id.day_high, WeatherFormat.Degrees(day.High));
+            item.SetTextViewText(Resource.Id.day_uv, WeatherFormat.Uv(day.UvIndex));
+            item.SetTextColor(Resource.Id.day_uv, Color.ParseColor(WeatherFormat.UvColor(day.UvIndex)));
             item.SetImageViewBitmap(Resource.Id.day_bar, WeatherBars.Create(day.Low!.Value, day.High!.Value, min, max));
             views.AddView(Resource.Id.widget_daily, item);
         }
