@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Tidgets</string>
+    <string name="widget_pourcast">PourCast</string>
+    <string name="widget_stockwise">StockWise</string>
     <string name="main_info">Add a Tidgets widget from your home screen to choose a source and set it up.</string>
-    <string name="widget_type">Widget Type</string>
     <string name="server_url">Server URL</string>
     <string name="api_key">API Key</string>
     <string name="grant_location">Grant Location Access</string>
-    <string name="add_widget">Add Widget</string>
+    <string name="save">Save</string>
 </resources>

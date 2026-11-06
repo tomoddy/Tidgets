@@ -6,13 +6,11 @@
     android:padding="24dp"
     android:fitsSystemWindows="true">
     <TextView
+        android:id="@+id/source_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/widget_type" />
-    <Spinner
-        android:id="@+id/source"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,9 +46,9 @@
         android:text="@string/grant_location"
         android:visibility="gone" />
     <Button
-        android:id="@+id/add_widget"
+        android:id="@+id/save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/add_widget" />
+        android:text="@string/save" />
 </LinearLayout>

@@ -1,22 +1,22 @@
 namespace Tidgets;
 
 /// <summary>
-/// The summary a site returns for the widget to show.
+/// What PourCast returns for its widget.
 /// </summary>
-public class WidgetData
+public class PourCastData
 {
     /// <summary>
-    /// The widget title, usually the place name.
+    /// The place name.
     /// </summary>
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
-    /// The main value.
+    /// The current temperature.
     /// </summary>
     public string Value { get; set; } = string.Empty;
 
     /// <summary>
-    /// The supporting line.
+    /// The condition with the day's high and low.
     /// </summary>
     public string Subtitle { get; set; } = string.Empty;
 }

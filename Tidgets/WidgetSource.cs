@@ -1,7 +1,7 @@
 namespace Tidgets;
 
 /// <summary>
-/// A predefined kind of site a widget can show, and what it needs to be set up.
+/// A predefined site a widget can show, and what it needs to be set up.
 /// </summary>
 public class WidgetSource
 {
@@ -11,7 +11,7 @@ public class WidgetSource
     public string Id { get; set; } = string.Empty;
 
     /// <summary>
-    /// The name shown when choosing a source.
+    /// The name shown in setup.
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
@@ -39,4 +39,9 @@ public class WidgetSource
     /// The header the API key is sent in.
     /// </summary>
     public string ApiKeyHeader { get; set; } = "X-Api-Key";
+
+    /// <summary>
+    /// The widget provider class that draws this source.
+    /// </summary>
+    public Type ProviderType { get; set; } = typeof(object);
 }

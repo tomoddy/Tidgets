@@ -7,7 +7,7 @@ using Android.Views;
 namespace Tidgets;
 
 /// <summary>
-/// Shown when a widget is added, to choose its source and set it up.
+/// Shown when a widget is added or reconfigured, to set up the site it shows.
 /// </summary>
 [Activity(Name = "uk.co.tzer0m.tidgets.ConfigActivity", Label = "@string/app_name", Exported = true)]
 [IntentFilter([AppWidgetManager.ActionAppwidgetConfigure])]
@@ -19,7 +19,7 @@ public class ConfigActivity : Activity
     private int WidgetId = AppWidgetManager.InvalidAppwidgetId;
 
     /// <summary>
-    /// Shows the setup form and wires up its controls.
+    /// Shows the setup form for the widget's source and wires up its controls.
     /// </summary>
     /// <param name="savedInstanceState">The previously saved instance state, if any.</param>
     protected override void OnCreate(Bundle? savedInstanceState)
@@ -27,48 +27,30 @@ public class ConfigActivity : Activity
         base.OnCreate(savedInstanceState);
         SetResult(Result.Canceled);
         WidgetId = Intent?.GetIntExtra(AppWidgetManager.ExtraAppwidgetId, AppWidgetManager.InvalidAppwidgetId) ?? AppWidgetManager.InvalidAppwidgetId;
-        if (WidgetId == AppWidgetManager.InvalidAppwidgetId)
+        string? provider = WidgetId == AppWidgetManager.InvalidAppwidgetId ? null : AppWidgetManager.GetInstance(this)?.GetAppWidgetInfo(WidgetId)?.Provider?.ClassName;
+        WidgetSource? source = provider is null ? null : WidgetSources.FindByProvider(provider);
+        if (source is null)
         {
             Finish();
             return;
         }
         SetContentView(Resource.Layout.activity_config);
-        Spinner sourceSpinner = (Spinner)FindViewById(Resource.Id.source)!;
+        ((TextView)FindViewById(Resource.Id.source_name)!).Text = source.Name;
         EditText baseUrl = (EditText)FindViewById(Resource.Id.base_url)!;
         EditText apiKey = (EditText)FindViewById(Resource.Id.api_key)!;
-        View apiKeyGroup = FindViewById(Resource.Id.api_key_group)!;
+        FindViewById(Resource.Id.api_key_group)!.Visibility = source.UsesApiKey ? ViewStates.Visible : ViewStates.Gone;
         Button grantLocation = (Button)FindViewById(Resource.Id.grant_location)!;
-        ArrayAdapter<string> adapter = new(this, Android.Resource.Layout.SimpleSpinnerItem, WidgetSources.All.Select(x => x.Name).ToList());
-        adapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
-        sourceSpinner.Adapter = adapter;
+        grantLocation.Visibility = source.UsesLocation ? ViewStates.Visible : ViewStates.Gone;
 
         // Reconfiguring a widget starts from its current setup.
         WidgetConfig? existing = new SettingsStore(this).GetConfig(WidgetId);
-        int existingIndex = existing is null ? -1 : WidgetSources.All.ToList().FindIndex(x => x.Id == existing.SourceId);
-        if (existingIndex >= 0)
-        {
-            sourceSpinner.SetSelection(existingIndex);
-            baseUrl.Text = existing!.BaseUrl;
-            apiKey.Text = existing.ApiKey;
-        }
-        bool firstSelection = true;
-        sourceSpinner.ItemSelected += (sender, args) =>
-        {
-            WidgetSource source = WidgetSources.All[args.Position];
-            if (!(firstSelection && existingIndex >= 0))
-            {
-                baseUrl.Text = source.DefaultBaseUrl;
-            }
-            firstSelection = false;
-            apiKeyGroup.Visibility = source.UsesApiKey ? ViewStates.Visible : ViewStates.Gone;
-            grantLocation.Visibility = source.UsesLocation ? ViewStates.Visible : ViewStates.Gone;
-        };
+        baseUrl.Text = existing?.BaseUrl ?? source.DefaultBaseUrl;
+        apiKey.Text = existing?.ApiKey ?? string.Empty;
         grantLocation.Click += (sender, args) => RequestPermissions([Manifest.Permission.AccessCoarseLocation], 1);
-        ((Button)FindViewById(Resource.Id.add_widget)!).Click += (sender, args) =>
+        ((Button)FindViewById(Resource.Id.save)!).Click += (sender, args) =>
         {
-            WidgetSource source = WidgetSources.All[sourceSpinner.SelectedItemPosition];
             new SettingsStore(this).SaveConfig(new WidgetConfig { WidgetId = WidgetId, SourceId = source.Id, BaseUrl = baseUrl.Text ?? string.Empty, ApiKey = apiKey.Text ?? string.Empty });
-            WidgetProvider.Refresh(this);
+            SourceWidget.Refresh(this, source, WidgetId);
             Intent result = new();
             result.PutExtra(AppWidgetManager.ExtraAppwidgetId, WidgetId);
             SetResult(Result.Ok, result);
