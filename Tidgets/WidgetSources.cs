@@ -8,7 +8,7 @@ public static class WidgetSources
     /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [new WidgetSource { Id = "pourcast", Name = "PourCast", DefaultBaseUrl = "https://pc.tzer0m.co.uk", UsesLocation = true }, new WidgetSource { Id = "stockwise", Name = "StockWise", DefaultBaseUrl = "https://stockwise.tzer0m.co.uk", UsesApiKey = true }];
+    public static IReadOnlyList<WidgetSource> All { get; } = [new WidgetSource { Id = "pourcast", Name = "PourCast", DefaultBaseUrl = "https://pc.tzer0m.co.uk", UsesLocation = true }, new WidgetSource { Id = "stockwise", Name = "StockWise", DefaultBaseUrl = "https://sw.tzer0m.co.uk", UsesApiKey = true }];
 
     /// <summary>
     /// Finds a source by its ID.
