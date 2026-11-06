@@ -1,5 +1,6 @@
 using Android.Appwidget;
 using Android.Content;
+using Android.Util;
 using AndroidUri = Android.Net.Uri;
 using JavaClass = Java.Lang.Class;
 
@@ -89,7 +90,7 @@ public class WidgetProvider : AppWidgetProvider
         foreach (int id in ids)
         {
             WidgetConfig? config = settings.GetConfig(id);
-            WidgetData data = await GetDataAsync(config, locations);
+            WidgetData data = await GetDataAsync(config, locations, settings);
             RemoteViews views = new(context.PackageName, Resource.Layout.widget);
             views.SetTextViewText(Resource.Id.widget_title, data.Title);
             views.SetTextViewText(Resource.Id.widget_value, data.Value);
@@ -103,11 +104,12 @@ public class WidgetProvider : AppWidgetProvider
     }
 
     /// <summary>
-    /// Gets what a widget should show, or a short message if it can't.
+    /// Gets what a widget should show, retrying once, and falling back to its last good value with the reason if it can't.
     /// </summary>
     /// <param name="config">The widget's setup, or null if it hasn't been set up.</param>
     /// <param name="locations">The location service.</param>
-    private static async Task<WidgetData> GetDataAsync(WidgetConfig? config, LocationService locations)
+    /// <param name="settings">The settings store, for the last good value.</param>
+    private static async Task<WidgetData> GetDataAsync(WidgetConfig? config, LocationService locations, SettingsStore settings)
     {
         WidgetSource? source = config is null ? null : WidgetSources.Find(config.SourceId);
         if (config is null || source is null)
@@ -119,13 +121,41 @@ public class WidgetProvider : AppWidgetProvider
         {
             return new WidgetData { Title = source.Name, Value = "--", Subtitle = "Location Unavailable" };
         }
-        try
+        Exception? failure = null;
+        for (int attempt = 1; attempt <= 2; attempt++)
         {
-            return await WidgetClient.GetAsync(source, config, location, TimeZoneInfo.Local.Id, CancellationToken.None);
+            try
+            {
+                WidgetData data = await WidgetClient.GetAsync(source, config, location, TimeZoneInfo.Local.Id, CancellationToken.None);
+                settings.SaveData(config.WidgetId, data);
+                return data;
+            }
+            catch (Exception exception)
+            {
+                failure = exception;
+                Log.Warn("Tidgets", $"Attempt {attempt} for {source.Name} failed: {exception}");
+                if (attempt == 1)
+                {
+                    await Task.Delay(3000);
+                }
+            }
         }
-        catch (Exception)
+        WidgetData? last = settings.GetData(config.WidgetId);
+        return new WidgetData { Title = last?.Title ?? source.Name, Value = last?.Value ?? "--", Subtitle = Describe(failure!) };
+    }
+
+    /// <summary>
+    /// Describes a failure in a few words for the widget.
+    /// </summary>
+    /// <param name="exception">The failure.</param>
+    private static string Describe(Exception exception)
+    {
+        return exception switch
         {
-            return new WidgetData { Title = source.Name, Value = "--", Subtitle = "Update Failed" };
-        }
+            TaskCanceledException => "Timed Out",
+            HttpRequestException { StatusCode: { } code } => $"Server Error {(int)code}",
+            HttpRequestException => "No Connection",
+            _ => "Update Failed"
+        };
     }
 }

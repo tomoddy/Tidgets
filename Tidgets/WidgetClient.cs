@@ -11,7 +11,7 @@ public static class WidgetClient
     /// <summary>
     /// The HTTP client shared by all requests.
     /// </summary>
-    private static readonly HttpClient Client = new() { Timeout = TimeSpan.FromSeconds(15) };
+    private static readonly HttpClient Client = new() { Timeout = TimeSpan.FromSeconds(20) };
 
     /// <summary>
     /// Gets the summary for a widget, sending the location and API key only if its source uses them.
