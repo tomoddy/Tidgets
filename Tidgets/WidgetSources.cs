@@ -23,9 +23,14 @@ public static class WidgetSources
     public static WidgetSource WakeBoard { get; } = new() { Id = "wakeboard", Name = "WakeBoard", DefaultBaseUrl = "https://wol.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(WakeBoardWidget) };
 
     /// <summary>
+    /// The Forgettable expiry tracker source.
+    /// </summary>
+    public static WidgetSource Forgettable { get; } = new() { Id = "forgettable", Name = "Forgettable", DefaultBaseUrl = "https://forgettable.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(ForgettableWidget) };
+
+    /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard];
+    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable];
 
     /// <summary>
     /// Finds the source whose widget class has the given Java class name.

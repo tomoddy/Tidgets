@@ -9,6 +9,7 @@ namespace Tidgets;
 [JsonSerializable(typeof(PourCastData))]
 [JsonSerializable(typeof(StockWiseData))]
 [JsonSerializable(typeof(WakeBoardData))]
+[JsonSerializable(typeof(ForgettableData))]
 public partial class WidgetJsonContext : JsonSerializerContext
 {
 }
