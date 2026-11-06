@@ -10,7 +10,7 @@ public static class WeatherBars
     /// <summary>
     /// The temperatures and colours the bar's gradient passes through.
     /// </summary>
-    private static readonly (double Temperature, int Red, int Green, int Blue)[] Stops = [(-5, 79, 195, 247), (5, 77, 208, 225), (10, 129, 199, 132), (15, 255, 213, 79), (20, 255, 183, 77), (28, 255, 112, 67)];
+    private static readonly (double Temperature, int Red, int Green, int Blue)[] Stops = [(-5, 0, 176, 255), (5, 0, 229, 255), (10, 0, 230, 118), (15, 255, 234, 0), (20, 255, 145, 0), (28, 255, 61, 0)];
 
     /// <summary>
     /// Draws a bar showing a day's low to high within the week's range, coloured by temperature.
