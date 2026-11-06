@@ -64,12 +64,12 @@ public static class WeatherFormat
     }
 
     /// <summary>
-    /// Gets the UV label, such as UV 3, or nothing when the index rounds to zero.
+    /// Gets the UV label, such as 0.9 or 3, or nothing if there is no value.
     /// </summary>
     /// <param name="uvIndex">The UV index.</param>
     public static string Uv(double? uvIndex)
     {
-        return uvIndex is null || Math.Round(uvIndex.Value, MidpointRounding.AwayFromZero) < 1 ? string.Empty : $"UV {Math.Round(uvIndex.Value, MidpointRounding.AwayFromZero)}";
+        return uvIndex is null ? string.Empty : string.Create(CultureInfo.InvariantCulture, $"{Math.Round(uvIndex.Value, 1, MidpointRounding.AwayFromZero):0.#}");
     }
 
     /// <summary>

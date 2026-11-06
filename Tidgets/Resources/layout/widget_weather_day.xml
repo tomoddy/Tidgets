@@ -8,7 +8,7 @@
     android:paddingBottom="3dp">
     <TextView
         android:id="@+id/day_name"
-        android:layout_width="40dp"
+        android:layout_width="34dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@android:color/white"
@@ -16,12 +16,12 @@
         android:textStyle="bold" />
     <TextView
         android:id="@+id/day_icon"
-        android:layout_width="30dp"
+        android:layout_width="26dp"
         android:layout_height="wrap_content"
         android:textSize="16sp" />
     <TextView
         android:id="@+id/day_low"
-        android:layout_width="34dp"
+        android:layout_width="28dp"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:maxLines="1"
@@ -32,19 +32,19 @@
         android:layout_width="0dp"
         android:layout_height="8dp"
         android:layout_weight="1"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:scaleType="fitXY" />
     <TextView
         android:id="@+id/day_high"
-        android:layout_width="34dp"
+        android:layout_width="28dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="@android:color/white"
         android:textSize="13sp" />
     <TextView
         android:id="@+id/day_uv"
-        android:layout_width="44dp"
+        android:layout_width="30dp"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:maxLines="1"

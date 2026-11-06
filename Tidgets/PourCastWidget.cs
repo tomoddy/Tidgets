@@ -37,7 +37,8 @@ public class PourCastWidget : SourceWidget
         views.SetTextViewText(Resource.Id.widget_temperature, WeatherFormat.Degrees(data.Temperature));
         views.SetTextViewText(Resource.Id.widget_icon, WeatherFormat.Icon(data.Condition, data.IsDay));
         views.SetTextViewText(Resource.Id.widget_condition, WeatherFormat.Words(data.Condition));
-        views.SetTextViewText(Resource.Id.widget_highlow, $"H:{WeatherFormat.Degrees(data.High)} L:{WeatherFormat.Degrees(data.Low)}");
+        views.SetTextViewText(Resource.Id.widget_high, $"H:{WeatherFormat.Degrees(data.High)}");
+        views.SetTextViewText(Resource.Id.widget_low, $"L:{WeatherFormat.Degrees(data.Low)}");
         views.SetTextViewText(Resource.Id.widget_rain, WeatherFormat.Rain(data.IsRaining, data.RainStart, data.RainEnd));
         views.RemoveAllViews(Resource.Id.widget_hourly);
         for (int index = 0; index < Math.Min(data.Hourly.Count, 6); index++)
