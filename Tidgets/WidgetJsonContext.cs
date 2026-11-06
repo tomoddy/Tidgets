@@ -8,6 +8,7 @@ namespace Tidgets;
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(PourCastData))]
 [JsonSerializable(typeof(StockWiseData))]
+[JsonSerializable(typeof(WakeBoardData))]
 public partial class WidgetJsonContext : JsonSerializerContext
 {
 }

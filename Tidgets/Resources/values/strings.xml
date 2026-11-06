@@ -2,6 +2,7 @@
     <string name="app_name">Tidgets</string>
     <string name="widget_pourcast">PourCast</string>
     <string name="widget_stockwise">StockWise</string>
+    <string name="widget_wakeboard">WakeBoard</string>
     <string name="main_info">Add a Tidgets widget from your home screen to choose a source and set it up.</string>
     <string name="server_url">Server URL</string>
     <string name="api_key">API Key</string>

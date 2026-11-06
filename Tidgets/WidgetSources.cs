@@ -18,9 +18,14 @@ public static class WidgetSources
     public static WidgetSource StockWise { get; } = new() { Id = "stockwise", Name = "StockWise", DefaultBaseUrl = "https://sw.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(StockWiseWidget) };
 
     /// <summary>
+    /// The WakeBoard machine status source.
+    /// </summary>
+    public static WidgetSource WakeBoard { get; } = new() { Id = "wakeboard", Name = "WakeBoard", DefaultBaseUrl = "https://wol.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(WakeBoardWidget) };
+
+    /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise];
+    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard];
 
     /// <summary>
     /// Finds the source whose widget class has the given Java class name.
