@@ -43,6 +43,7 @@ public abstract class SourceWidget : AppWidgetProvider
         {
             return;
         }
+        RefreshScheduler.Schedule(context);
         PendingResult? pending = GoAsync();
         Task.Run(async () =>
         {
@@ -55,6 +56,19 @@ public abstract class SourceWidget : AppWidgetProvider
                 pending?.Finish();
             }
         });
+    }
+
+    /// <summary>
+    /// Stops the repeating refresh when the last widget of any source is removed.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    public override void OnDisabled(Context? context)
+    {
+        base.OnDisabled(context);
+        if (context is not null)
+        {
+            RefreshScheduler.CancelIfUnused(context);
+        }
     }
 
     /// <summary>
