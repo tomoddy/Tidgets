@@ -37,13 +37,15 @@ public class TzerDashboardWidget : SourceWidget
         {
             views.SetTextViewText(Resource.Id.widget_hours, "--");
             views.SetTextViewText(Resource.Id.widget_target, string.Empty);
+            views.SetTextViewText(Resource.Id.widget_today, string.Empty);
             views.SetTextViewText(Resource.Id.widget_pace, string.Empty);
             views.SetImageViewBitmap(Resource.Id.widget_bar, HoursBar.Create(0, 1, 0));
         }
         else
         {
             views.SetTextViewText(Resource.Id.widget_hours, Format(data.Hours.Current));
-            views.SetTextViewText(Resource.Id.widget_target, $"of {Format(data.Hours.Target)}h");
+            views.SetTextViewText(Resource.Id.widget_target, $"Month {Format(data.Hours.Target)}h");
+            views.SetTextViewText(Resource.Id.widget_today, $"Today {Format(data.Hours.Pace)}h");
             views.SetTextViewText(Resource.Id.widget_pace, $"{Format(Math.Abs(data.Hours.DaysAhead))} Days {(data.Hours.DaysAhead >= 0 ? "Ahead" : "Behind")}");
             views.SetTextColor(Resource.Id.widget_pace, Color.ParseColor(data.Hours.DaysAhead >= 0 ? "#6BCB77" : "#FFC857"));
             views.SetImageViewBitmap(Resource.Id.widget_bar, HoursBar.Create(data.Hours.Current, data.Hours.Target, data.Hours.Pace));

@@ -5,8 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    android:padding="18dp"
+    android:padding="16dp"
     android:background="@drawable/widget_background">
+    <TextView
+        android:id="@+id/widget_today"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="#B3FFFFFF"
+        android:textSize="13sp" />
+    <TextView
+        android:id="@+id/widget_target"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textColor="#B3FFFFFF"
+        android:textSize="13sp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,39 +32,29 @@
             android:layout_height="wrap_content"
             android:text="--"
             android:textColor="@android:color/white"
-            android:textSize="52sp"
+            android:textSize="40sp"
             android:fontFamily="sans-serif-light" />
-        <TextView
-            android:id="@+id/widget_target"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="8dp"
-            android:maxLines="1"
-            android:textColor="#B3FFFFFF"
-            android:textSize="14sp" />
     </LinearLayout>
     <ImageView
         android:id="@+id/widget_bar"
         android:layout_width="match_parent"
-        android:layout_height="14dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="4dp"
         android:scaleType="fitXY" />
     <TextView
         android:id="@+id/widget_pace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:maxLines="1"
         android:textColor="#FF6BCB77"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:background="#33FFFFFF" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,14 +72,14 @@
                 android:layout_height="wrap_content"
                 android:text="--"
                 android:textColor="@android:color/white"
-                android:textSize="44sp"
+                android:textSize="34sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tickets"
                 android:textColor="#B3FFFFFF"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -89,14 +93,14 @@
                 android:layout_height="wrap_content"
                 android:text="--"
                 android:textColor="@android:color/white"
-                android:textSize="44sp"
+                android:textSize="34sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Unread"
                 android:textColor="#B3FFFFFF"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -110,36 +114,35 @@
                 android:layout_height="wrap_content"
                 android:text="--"
                 android:textColor="@android:color/white"
-                android:textSize="44sp"
+                android:textSize="34sp"
                 android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tasks"
                 android:textColor="#B3FFFFFF"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
         android:background="#33FFFFFF" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Next Event"
         android:textColor="#B3FFFFFF"
-        android:textSize="13sp" />
+        android:textSize="12sp" />
     <TextView
         android:id="@+id/widget_event_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:textColor="#FF64B5F6"
-        android:layout_marginTop="2dp"
-        android:textSize="28sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
     <TextView
         android:id="@+id/widget_event_title"
@@ -148,7 +151,7 @@
         android:maxLines="2"
         android:ellipsize="end"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
     <TextView
         android:id="@+id/widget_status"
         android:layout_width="match_parent"
