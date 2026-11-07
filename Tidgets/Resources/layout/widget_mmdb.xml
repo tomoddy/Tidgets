@@ -5,7 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    android:padding="10dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
     android:background="@drawable/widget_background">
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="--"
+            android:includeFontPadding="false"
             android:textColor="@android:color/white"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -27,7 +31,8 @@
             android:layout_marginLeft="10dp"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="Films Watched"
+            android:text="Watched"
+            android:includeFontPadding="false"
             android:textColor="#B3FFFFFF"
             android:textSize="15sp" />
     </LinearLayout>
