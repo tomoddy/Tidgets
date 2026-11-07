@@ -43,9 +43,9 @@ public class TzerDashboardWidget : SourceWidget
         }
         else
         {
-            views.SetTextViewText(Resource.Id.widget_hours, Format(data.Hours.Current));
-            views.SetTextViewText(Resource.Id.widget_target, $"Month {Format(data.Hours.Target)}h");
-            views.SetTextViewText(Resource.Id.widget_today, $"Today {Format(data.Hours.Pace)}h");
+            views.SetTextViewText(Resource.Id.widget_hours, Hours(data.Hours.Current));
+            views.SetTextViewText(Resource.Id.widget_target, $"Month {Hours(data.Hours.Target)}h");
+            views.SetTextViewText(Resource.Id.widget_today, $"Today {Hours(data.Hours.Pace)}h");
             views.SetTextViewText(Resource.Id.widget_pace, $"{Format(Math.Abs(data.Hours.DaysAhead))} Days {(data.Hours.DaysAhead >= 0 ? "Ahead" : "Behind")}");
             views.SetTextColor(Resource.Id.widget_pace, Color.ParseColor(data.Hours.DaysAhead >= 0 ? "#6BCB77" : "#FFC857"));
             views.SetImageViewBitmap(Resource.Id.widget_bar, HoursBar.Create(data.Hours.Current, data.Hours.Target, data.Hours.Pace));
@@ -64,6 +64,15 @@ public class TzerDashboardWidget : SourceWidget
     private static string Format(double value)
     {
         return string.Create(CultureInfo.InvariantCulture, $"{value:0.#}");
+    }
+
+    /// <summary>
+    /// Formats hours to two decimal places.
+    /// </summary>
+    /// <param name="value">The hours.</param>
+    private static string Hours(double value)
+    {
+        return string.Create(CultureInfo.InvariantCulture, $"{value:0.00}");
     }
 
     /// <summary>
