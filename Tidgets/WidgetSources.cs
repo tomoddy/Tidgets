@@ -33,9 +33,14 @@ public static class WidgetSources
     public static WidgetSource HomeRun { get; } = new() { Id = "homerun", Name = "HomeRun", DefaultBaseUrl = "https://hr.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(HomeRunWidget) };
 
     /// <summary>
+    /// The TzerDashboard hours and work source.
+    /// </summary>
+    public static WidgetSource TzerDashboard { get; } = new() { Id = "tzerdashboard", Name = "TzerDashboard", DefaultBaseUrl = "https://dashboard.tzer.co.uk", UsesApiKey = true, ProviderType = typeof(TzerDashboardWidget) };
+
+    /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun];
+    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun, TzerDashboard];
 
     /// <summary>
     /// Finds the source whose widget class has the given Java class name.
