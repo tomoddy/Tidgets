@@ -44,4 +44,9 @@ public class WidgetSource
     /// The widget provider class that draws this source.
     /// </summary>
     public Type ProviderType { get; set; } = typeof(object);
+
+    /// <summary>
+    /// Creates the widget class that draws this source, so the refresh job can update its widgets.
+    /// </summary>
+    public Func<SourceWidget> CreateWidget { get; set; } = () => throw new InvalidOperationException("No widget class set for this source.");
 }

@@ -23,6 +23,11 @@ public class WakeBoardWidget : SourceWidget
     protected override int Layout => Resource.Layout.widget_wakeboard;
 
     /// <summary>
+    /// Leaves out the status line, as it doesn't fit in a widget one cell tall.
+    /// </summary>
+    protected override bool ShowsStatus => false;
+
+    /// <summary>
     /// Shows the online and offline counts.
     /// </summary>
     /// <param name="context">The context.</param>

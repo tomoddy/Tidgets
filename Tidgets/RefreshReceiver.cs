@@ -1,5 +1,4 @@
 using Android.App;
-using Android.Appwidget;
 using Android.Content;
 
 namespace Tidgets;
@@ -12,7 +11,7 @@ namespace Tidgets;
 public class RefreshReceiver : BroadcastReceiver
 {
     /// <summary>
-    /// Asks each placed widget to update, or stops the alarm if there are none.
+    /// Hands the refresh to the refresh job, which waits for a connection if there isn't one, or stops the alarm if no widgets are left.
     /// </summary>
     /// <param name="context">The context.</param>
     /// <param name="intent">The alarm or boot intent.</param>
@@ -23,17 +22,9 @@ public class RefreshReceiver : BroadcastReceiver
             return;
         }
         RefreshScheduler.CancelIfUnused(context);
-        foreach (WidgetSource source in WidgetSources.All)
+        if (WidgetSources.All.Any(x => RefreshScheduler.GetWidgetIds(context, x).Length > 0))
         {
-            int[] ids = RefreshScheduler.GetWidgetIds(context, source);
-            if (ids.Length == 0)
-            {
-                continue;
-            }
-            Intent update = new(context, source.ProviderType);
-            update.SetAction(AppWidgetManager.ActionAppwidgetUpdate);
-            update.PutExtra(AppWidgetManager.ExtraAppwidgetIds, ids);
-            context.SendBroadcast(update);
+            RefreshJob.Schedule(context);
         }
         if (intent?.Action == Intent.ActionBootCompleted)
         {

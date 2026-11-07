@@ -33,13 +33,4 @@
             android:textSize="22sp"
             android:textStyle="bold" />
     </LinearLayout>
-    <TextView
-        android:id="@+id/widget_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textColor="#FFFFC857"
-        android:textSize="11sp"
-        android:visibility="gone" />
 </LinearLayout>

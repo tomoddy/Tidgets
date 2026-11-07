@@ -43,17 +43,27 @@ public class SettingsStore(Context context)
     /// <param name="widgetId">The Android ID of the widget.</param>
     public void DeleteConfig(int widgetId)
     {
-        Preferences.Edit()?.Remove($"widget_{widgetId}_source")?.Remove($"widget_{widgetId}_url")?.Remove($"widget_{widgetId}_key")?.Remove($"widget_{widgetId}_data")?.Apply();
+        Preferences.Edit()?.Remove($"widget_{widgetId}_source")?.Remove($"widget_{widgetId}_url")?.Remove($"widget_{widgetId}_key")?.Remove($"widget_{widgetId}_data")?.Remove($"widget_{widgetId}_updated")?.Apply();
     }
 
     /// <summary>
-    /// Remembers the last response a widget received successfully.
+    /// Remembers the last response a widget received successfully, and when it arrived.
     /// </summary>
     /// <param name="widgetId">The Android ID of the widget.</param>
     /// <param name="data">The site's response, as JSON.</param>
     public void SaveData(int widgetId, string data)
     {
-        Preferences.Edit()?.PutString($"widget_{widgetId}_data", data)?.Apply();
+        Preferences.Edit()?.PutString($"widget_{widgetId}_data", data)?.PutLong($"widget_{widgetId}_updated", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())?.Apply();
+    }
+
+    /// <summary>
+    /// Gets when a widget last received data successfully, in local time, or null if it never has.
+    /// </summary>
+    /// <param name="widgetId">The Android ID of the widget.</param>
+    public DateTime? GetUpdated(int widgetId)
+    {
+        long updated = Preferences.GetLong($"widget_{widgetId}_updated", 0);
+        return updated > 0 ? DateTimeOffset.FromUnixTimeMilliseconds(updated).LocalDateTime : null;
     }
 
     /// <summary>

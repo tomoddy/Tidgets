@@ -50,7 +50,7 @@ public class ConfigActivity : Activity
         ((Button)FindViewById(Resource.Id.save)!).Click += (sender, args) =>
         {
             new SettingsStore(this).SaveConfig(new WidgetConfig { WidgetId = WidgetId, SourceId = source.Id, BaseUrl = baseUrl.Text ?? string.Empty, ApiKey = apiKey.Text ?? string.Empty });
-            SourceWidget.Refresh(this, source, WidgetId);
+            RefreshJob.Schedule(this);
             Intent result = new();
             result.PutExtra(AppWidgetManager.ExtraAppwidgetId, WidgetId);
             SetResult(Result.Ok, result);

@@ -24,6 +24,11 @@ public class MMDbWidget : SourceWidget
     protected override int Layout => Resource.Layout.widget_mmdb;
 
     /// <summary>
+    /// Leaves out the status line, as it doesn't fit in a widget one cell tall.
+    /// </summary>
+    protected override bool ShowsStatus => false;
+
+    /// <summary>
     /// Shows the number of films watched.
     /// </summary>
     /// <param name="context">The context.</param>

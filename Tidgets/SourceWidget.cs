@@ -18,9 +18,14 @@ public abstract class SourceWidget : AppWidgetProvider
     protected abstract WidgetSource Source { get; }
 
     /// <summary>
-    /// The layout resource for this widget. It needs views with the IDs widget_root and widget_status.
+    /// The layout resource for this widget. It needs a view with the ID widget_root, and widget_status too if the widget shows its status.
     /// </summary>
     protected abstract int Layout { get; }
+
+    /// <summary>
+    /// Whether the widget has a status line for problems such as No Connection. Widgets one cell tall leave it out, as it doesn't fit.
+    /// </summary>
+    protected virtual bool ShowsStatus => true;
 
     /// <summary>
     /// Fills in the widget's views from the JSON the site returned.
@@ -31,7 +36,7 @@ public abstract class SourceWidget : AppWidgetProvider
     protected abstract void Draw(Context context, RemoteViews views, string json);
 
     /// <summary>
-    /// Updates the widgets, finishing the work after the broadcast returns.
+    /// Hands the update to the refresh job, which runs once there's a network connection and isn't cut short like a broadcast.
     /// </summary>
     /// <param name="context">The context.</param>
     /// <param name="appWidgetManager">The widget manager.</param>
@@ -39,23 +44,12 @@ public abstract class SourceWidget : AppWidgetProvider
     public override void OnUpdate(Context? context, AppWidgetManager? appWidgetManager, int[]? appWidgetIds)
     {
         base.OnUpdate(context, appWidgetManager, appWidgetIds);
-        if (context is null || appWidgetManager is null || appWidgetIds is null)
+        if (context is null)
         {
             return;
         }
         RefreshScheduler.Schedule(context);
-        PendingResult? pending = GoAsync();
-        Task.Run(async () =>
-        {
-            try
-            {
-                await UpdateAsync(context, appWidgetManager, appWidgetIds);
-            }
-            finally
-            {
-                pending?.Finish();
-            }
-        });
+        RefreshJob.Schedule(context);
     }
 
     /// <summary>
@@ -91,30 +85,21 @@ public abstract class SourceWidget : AppWidgetProvider
     }
 
     /// <summary>
-    /// Asks one widget to update now.
+    /// Fetches and draws every placed widget of this source. Called by the refresh job.
     /// </summary>
     /// <param name="context">The context.</param>
-    /// <param name="source">The source the widget shows.</param>
-    /// <param name="widgetId">The Android ID of the widget.</param>
-    public static void Refresh(Context context, WidgetSource source, int widgetId)
+    /// <returns>True if any widget couldn't reach its site, so the job should try again later.</returns>
+    public async Task<bool> UpdateAllAsync(Context context)
     {
-        int[] ids = [widgetId];
-        Intent intent = new(context, source.ProviderType);
-        intent.SetAction(AppWidgetManager.ActionAppwidgetUpdate);
-        intent.PutExtra(AppWidgetManager.ExtraAppwidgetIds, ids);
-        context.SendBroadcast(intent);
-    }
-
-    /// <summary>
-    /// Fetches and draws each widget, showing the last good data with a status line if it can't.
-    /// </summary>
-    /// <param name="context">The context.</param>
-    /// <param name="manager">The widget manager.</param>
-    /// <param name="ids">The IDs of the widgets to update.</param>
-    private async Task UpdateAsync(Context context, AppWidgetManager manager, int[] ids)
-    {
+        int[] ids = RefreshScheduler.GetWidgetIds(context, Source);
+        AppWidgetManager? manager = AppWidgetManager.GetInstance(context);
+        if (ids.Length == 0 || manager is null)
+        {
+            return false;
+        }
         SettingsStore settings = new(context);
         LocationService locations = new(context, settings);
+        bool failed = false;
         foreach (int id in ids)
         {
             WidgetConfig? config = settings.GetConfig(id);
@@ -126,7 +111,9 @@ public abstract class SourceWidget : AppWidgetProvider
             }
             else
             {
-                (json, status) = await FetchAsync(config, json, locations, settings);
+                bool fetchFailed;
+                (json, status, fetchFailed) = await FetchAsync(config, json, locations, settings);
+                failed |= fetchFailed;
             }
             RemoteViews views = new(context.PackageName, Layout);
             if (json is not null)
@@ -141,30 +128,34 @@ public abstract class SourceWidget : AppWidgetProvider
                     status = "Bad Data";
                 }
             }
-            views.SetTextViewText(Resource.Id.widget_status, status ?? string.Empty);
-            views.SetViewVisibility(Resource.Id.widget_status, status is null ? ViewStates.Gone : ViewStates.Visible);
+            if (ShowsStatus)
+            {
+                views.SetTextViewText(Resource.Id.widget_status, status ?? string.Empty);
+                views.SetViewVisibility(Resource.Id.widget_status, status is null ? ViewStates.Gone : ViewStates.Visible);
+            }
             if (config is not null)
             {
                 views.SetOnClickPendingIntent(Resource.Id.widget_root, PendingIntent.GetActivity(context, id, new Intent(Intent.ActionView, AndroidUri.Parse(config.BaseUrl)), PendingIntentFlags.Immutable));
             }
             manager.UpdateAppWidget(id, views);
         }
+        return failed;
     }
 
     /// <summary>
-    /// Fetches the widget's data, retrying once. On failure it returns the last good data and why it failed.
+    /// Fetches the widget's data, retrying once. On failure it returns the last good data, why it failed and when it last worked.
     /// </summary>
     /// <param name="config">The widget's setup.</param>
     /// <param name="cached">The last good response, if any.</param>
     /// <param name="locations">The location service.</param>
     /// <param name="settings">The settings store, for remembering the response.</param>
-    private async Task<(string? Json, string? Status)> FetchAsync(WidgetConfig config, string? cached, LocationService locations, SettingsStore settings)
+    private async Task<(string? Json, string? Status, bool Failed)> FetchAsync(WidgetConfig config, string? cached, LocationService locations, SettingsStore settings)
     {
         WidgetSource source = Source;
         (double Latitude, double Longitude)? location = source.UsesLocation ? locations.GetLocation() : null;
         if (source.UsesLocation && location is null)
         {
-            return (cached, "Location Unavailable");
+            return (cached, "Location Unavailable", false);
         }
         Exception? failure = null;
         for (int attempt = 1; attempt <= 2; attempt++)
@@ -173,7 +164,7 @@ public abstract class SourceWidget : AppWidgetProvider
             {
                 string json = await WidgetClient.GetAsync(source, config, location, TimeZoneInfo.Local.Id, CancellationToken.None);
                 settings.SaveData(config.WidgetId, json);
-                return (json, null);
+                return (json, null, false);
             }
             catch (Exception exception)
             {
@@ -185,7 +176,9 @@ public abstract class SourceWidget : AppWidgetProvider
                 }
             }
         }
-        return (cached, Describe(failure!));
+        DateTime? updated = settings.GetUpdated(config.WidgetId);
+        string status = updated is null ? Describe(failure!) : $"{Describe(failure!)} · {(updated.Value.Date == DateTime.Today ? updated.Value.ToString("HH:mm") : updated.Value.ToString("ddd HH:mm"))}";
+        return (cached, status, true);
     }
 
     /// <summary>
