@@ -28,9 +28,14 @@ public static class WidgetSources
     public static WidgetSource Forgettable { get; } = new() { Id = "forgettable", Name = "Forgettable", DefaultBaseUrl = "https://forgettable.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(ForgettableWidget) };
 
     /// <summary>
+    /// The HomeRun workout source.
+    /// </summary>
+    public static WidgetSource HomeRun { get; } = new() { Id = "homerun", Name = "HomeRun", DefaultBaseUrl = "https://hr.tzer0m.co.uk", UsesApiKey = true, ProviderType = typeof(HomeRunWidget) };
+
+    /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable];
+    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun];
 
     /// <summary>
     /// Finds the source whose widget class has the given Java class name.
