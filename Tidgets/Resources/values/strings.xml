@@ -7,6 +7,7 @@
     <string name="widget_homerun">HomeRun</string>
     <string name="widget_tzerdashboard">TzerDashboard</string>
     <string name="widget_mmdb">MMDb</string>
+    <string name="widget_dashboard">Dashboard</string>
     <string name="main_info">Add a Tidgets widget from your home screen to choose a source and set it up.</string>
     <string name="server_url">Server URL</string>
     <string name="api_key">API Key</string>

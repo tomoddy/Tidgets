@@ -43,9 +43,14 @@ public static class WidgetSources
     public static WidgetSource MMDb { get; } = new() { Id = "mmdb", Name = "MMDb", DefaultBaseUrl = "https://mmdb.tzer0m.co.uk", ProviderType = typeof(MMDbWidget), CreateWidget = () => new MMDbWidget() };
 
     /// <summary>
+    /// The homelab Dashboard status source. Its endpoint is public, so it needs no API key.
+    /// </summary>
+    public static WidgetSource Dashboard { get; } = new() { Id = "dashboard", Name = "Dashboard", DefaultBaseUrl = "https://tzer0m.co.uk", ProviderType = typeof(DashboardWidget), CreateWidget = () => new DashboardWidget() };
+
+    /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun, TzerDashboard, MMDb];
+    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun, TzerDashboard, MMDb, Dashboard];
 
     /// <summary>
     /// Finds the source whose widget class has the given Java class name.
