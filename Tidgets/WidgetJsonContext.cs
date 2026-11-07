@@ -12,6 +12,7 @@ namespace Tidgets;
 [JsonSerializable(typeof(ForgettableData))]
 [JsonSerializable(typeof(HomeRunData))]
 [JsonSerializable(typeof(TzerDashboardData))]
+[JsonSerializable(typeof(MMDbData))]
 public partial class WidgetJsonContext : JsonSerializerContext
 {
 }

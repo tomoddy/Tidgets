@@ -38,9 +38,14 @@ public static class WidgetSources
     public static WidgetSource TzerDashboard { get; } = new() { Id = "tzerdashboard", Name = "TzerDashboard", DefaultBaseUrl = "https://dashboard.tzer.co.uk", UsesApiKey = true, ProviderType = typeof(TzerDashboardWidget) };
 
     /// <summary>
+    /// The MMDb film ratings source. Its endpoint is public, so it needs no API key.
+    /// </summary>
+    public static WidgetSource MMDb { get; } = new() { Id = "mmdb", Name = "MMDb", DefaultBaseUrl = "https://mmdb.tzer0m.co.uk", ProviderType = typeof(MMDbWidget) };
+
+    /// <summary>
     /// Every available source.
     /// </summary>
-    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun, TzerDashboard];
+    public static IReadOnlyList<WidgetSource> All { get; } = [PourCast, StockWise, WakeBoard, Forgettable, HomeRun, TzerDashboard, MMDb];
 
     /// <summary>
     /// Finds the source whose widget class has the given Java class name.
