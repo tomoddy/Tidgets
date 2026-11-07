@@ -32,7 +32,7 @@
             android:textStyle="bold"
             android:visibility="gone" />
     </LinearLayout>
-    <View
+    <ImageView
         android:layout_width="1dp"
         android:layout_height="24dp"
         android:layout_marginLeft="12dp"
