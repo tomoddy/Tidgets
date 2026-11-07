@@ -43,7 +43,7 @@ public class TzerDashboardWidget : SourceWidget
         else
         {
             views.SetTextViewText(Resource.Id.widget_hours, Format(data.Hours.Current));
-            views.SetTextViewText(Resource.Id.widget_target, $"of {Format(data.Hours.Target)} Hours");
+            views.SetTextViewText(Resource.Id.widget_target, $"of {Format(data.Hours.Target)}h");
             views.SetTextViewText(Resource.Id.widget_pace, $"{Format(Math.Abs(data.Hours.DaysAhead))} Days {(data.Hours.DaysAhead >= 0 ? "Ahead" : "Behind")}");
             views.SetTextColor(Resource.Id.widget_pace, Color.ParseColor(data.Hours.DaysAhead >= 0 ? "#6BCB77" : "#FFC857"));
             views.SetImageViewBitmap(Resource.Id.widget_bar, HoursBar.Create(data.Hours.Current, data.Hours.Target, data.Hours.Pace));
