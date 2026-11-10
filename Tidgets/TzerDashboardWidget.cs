@@ -58,12 +58,12 @@ public class TzerDashboardWidget : SourceWidget
     }
 
     /// <summary>
-    /// Formats a number to one decimal place, dropping a trailing zero.
+    /// Formats a number to two decimal places.
     /// </summary>
     /// <param name="value">The number.</param>
     private static string Format(double value)
     {
-        return string.Create(CultureInfo.InvariantCulture, $"{value:0.#}");
+        return string.Create(CultureInfo.InvariantCulture, $"{value:0.00}");
     }
 
     /// <summary>
